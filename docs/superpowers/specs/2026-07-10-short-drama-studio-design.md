@@ -85,6 +85,14 @@ projects/<剧名>/
 - `AigcComplianceConfirmationRequired`：提示用户去即梦 Web 端完成授权后重试
 - Gemini 登录态失效：降级即梦 text2image 并提示
 
+## 修订记录
+
+**2026-07-10 修订 1**（用户澄清）：
+
+- 即梦 Seedance 生成的视频**自带声音**（台词/音效），全流程保留音轨；concat.ps1 统一转码含音频（无音轨片段补静音）
+- 新增第 9 个 agent：composer 配乐师，用 Suno 网页端（agent-browser 浏览器自动化）生成 BGM，产出 `04-footage/ep{NN}/bgm/` + 对位说明；新增 `/music` 命令，剧本定稿后可与生成/审片并行
+- 交付边界修正：工作台产出**粗剪预览**（硬切、保留原声、无字幕）+ 精剪素材包（原始镜头、BGM、台词本）；最终精剪（配乐混音、字幕、转场、调色）在剪映/PR 完成，BGM 不混入粗剪
+
 ## 测试/验收
 
 - 建项 → 各命令可独立触发对应 agent
