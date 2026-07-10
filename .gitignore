@@ -1,0 +1,4 @@
+# 生成的视频体积大，不进 git（剧本/分镜/shotlist/设定图保留版本管理）
+projects/**/*.mp4
+projects/**/_work/
+projects/**/_review/
