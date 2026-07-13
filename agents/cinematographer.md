@@ -53,7 +53,7 @@ tools: Read, Write, Edit, Glob, Grep, Skill
 ## 提示词要领
 
 - 逐镜头对照分镜表的：景别、运镜、画面描述、情绪，四要素全部转译进提示词
-- 引用 style-bible.md 的色调光影关键词，保持全剧质感统一
+- 引用 style-bible.md 的色调光影关键词，保持全片质感统一；**动漫形态每条提示词都以 style-bible 锁定的画风关键词开头（逐字复用），防止画风漂移**
 - 台词不写进视频提示词（口型不可控），但可写"speaking with intense expression"这类表演指令
 - 交付前逐条自查：引用的设定图文件是否真实存在（用 Glob 验证），路径错误会导致生成失败白烧积分
 - 只引用 `03-design/characters/`、`03-design/scenes/` 下的正式图（已过水印清理），**绝不引用 `_raw/` 目录的原始图**——带水印的参考图会把水印复刻进视频

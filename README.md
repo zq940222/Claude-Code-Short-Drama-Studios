@@ -1,36 +1,39 @@
-# 短剧工作台（Short Drama Studio）
+# 影视工作台（Film Studio）
 
 **中文** | [English](README.en.md)
 
-![version](https://img.shields.io/badge/version-1.4.1-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%7C%20Windows%20%7C%20macOS-lightgrey)
+![version](https://img.shields.io/badge/version-2.0.0-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%7C%20Windows%20%7C%20macOS-lightgrey)
 
-在 Claude Code 中完成短剧创作全流程的 AI 工作台：从一句话创意到平台发布——剧本 → 分镜 → 角色/场景设定图 → 视频生成 → 配乐 → 审片 → 粗剪 → 剪映精剪（自动生成草稿）→ 抖音发布。
+在 Claude Code 中完成影视创作全流程的 AI 工作台，支持三种创作形态：**短剧 / 电影短片 / 动漫番剧**。从一句话创意到平台发布——剧本 → 分镜 → 角色/场景设定图 → 视频生成 → 配乐 → 审片 → 粗剪 → 剪映精剪（自动生成草稿）→ 平台发布。
 
-由 11 个影视专业 agent 分工协作，通过分阶段 slash 命令推进，内置四道人工确认门禁（防止积分误消耗和误发布）。
+由 11 个影视专业 agent 分工协作（编剧/导演/美术/摄影/运营按创作形态自动切换法则），通过分阶段 slash 命令推进，内置四道人工确认门禁（防止积分误消耗和误发布）。
+
+> 本项目原名 short-drama-studio（短剧工作台），v2.0.0 起更名 film-studio 并扩展为多形态；旧仓库地址自动重定向。
 
 ## 安装（Claude Code 插件）
 
 本仓库是标准 Claude Code 插件（自托管 marketplace），命令行两步安装：
 
 ```bash
-claude plugin marketplace add zq940222/Claude-Code-Short-Drama-Studios
-claude plugin install short-drama-studio@short-drama-studio
+claude plugin marketplace add zq940222/Claude-Code-Film-Studio
+claude plugin install film-studio@film-studio
 ```
 
 或在 Claude Code 会话内：
 
 ```
-/plugin marketplace add zq940222/Claude-Code-Short-Drama-Studios
-/plugin install short-drama-studio@short-drama-studio
+/plugin marketplace add zq940222/Claude-Code-Film-Studio
+/plugin install film-studio@film-studio
 ```
 
 安装后重启会话生效。默认装到用户级（所有目录可用）；只想在某个项目用加 `--scope project`。
 
-- **更新**：`claude plugin update short-drama-studio`（新版本发布后）
-- **卸载**：`claude plugin uninstall short-drama-studio`
-- **锁定版本**：`claude plugin marketplace add zq940222/Claude-Code-Short-Drama-Studios@v1.3.0`
+- **更新**：`claude plugin update film-studio`（新版本发布后）
+- **卸载**：`claude plugin uninstall film-studio`
+- **锁定版本**：`claude plugin marketplace add zq940222/Claude-Code-Film-Studio@v2.0.0`
+- **从旧版迁移**（装过 short-drama-studio 的）：`claude plugin marketplace update short-drama-studio` 后按提示走 renames 迁移；或直接卸载旧插件、按上面命令重装
 
-安装后在**任意工作目录**运行 `/new-drama`：首次会自动初始化工作区（复制创作规范 CLAUDE.md 和拼接脚本），然后建项开拍。命令带插件命名空间时写作 `/short-drama-studio:new-drama`，无重名时直接 `/new-drama` 即可。
+安装后在**任意工作目录**运行 `/new-drama`：首次会自动初始化工作区（复制创作规范 CLAUDE.md 和工具脚本），然后建项开拍。命令带插件命名空间时写作 `/film-studio:new-drama`，无重名时直接 `/new-drama` 即可。
 
 ## 环境要求
 
@@ -51,7 +54,7 @@ claude plugin install short-drama-studio@short-drama-studio
 
 ```
 1. 安装插件后，在任意工作目录启动 Claude Code
-2. /new-drama        # 首次自动初始化工作区，然后建项：选题材、画幅、每集时长、集数
+2. /new-drama        # 首次自动初始化工作区，然后建项：选创作形态（短剧/电影短片/动漫番剧）、题材、画幅、每集时长、集数
 3. /script           # 剧本创作，迭代到你满意 →【门禁① 定稿确认】
 4. /storyboard       # 剧本拆分镜表（镜号/景别/运镜/时长/画面/台词）
 5. /design           # 角色三视图 + 场景设定图 →【门禁② 定稿确认】
@@ -88,9 +91,9 @@ claude plugin install short-drama-studio@short-drama-studio
 | Agent | 角色 | 职责 |
 |---|---|---|
 | producer | 制片人 | 建项、进度、积分预算、门禁把关 |
-| screenwriter | 编剧 | 大纲、人物小传、分集剧本（黄金3秒、反转密度等短剧法则） |
-| director | 导演 | 分镜表：景别、运镜、时长、节奏，兼顾 AI 生成可行性 |
-| art-director | 美术指导 | 设定图与全剧视觉一致性（style-bible） |
+| screenwriter | 编剧 | 大纲、人物小传、分集剧本（按形态切换：短剧法则/电影叙事/动漫章节感） |
+| director | 导演 | 分镜表：景别、运镜、时长、节奏（按形态调整镜头语言），兼顾 AI 生成可行性 |
+| art-director | 美术指导 | 设定图与全片视觉一致性（style-bible，动漫形态锁定画风流派） |
 | cinematographer | 摄影指导 | 分镜 → Seedance 2.0 提示词 → shotlist.json |
 | video-generator | 视频生成师 | 调 dreamina 提交/轮询/下载/重试，实时记账 |
 | composer | 配乐师 | Suno 网页端生成 BGM、对位说明 |
@@ -124,8 +127,8 @@ claude plugin install short-drama-studio@short-drama-studio
 ## 项目目录结构
 
 ```
-projects/<剧名>/
-├── project.json           # 项目档案：画幅、时长、集数、各阶段状态、积分消耗记录
+projects/<片名>/
+├── project.json           # 项目档案：创作形态(medium)、画幅、时长、集数、各阶段状态、积分消耗记录
 ├── 01-script/             # outline.md、characters.md、ep01.md ...
 ├── 02-storyboard/         # ep01-storyboard.md ...
 ├── 03-design/             # style-bible.md、characters/、scenes/
@@ -175,5 +178,5 @@ docs/superpowers/specs/    # 设计文档（含修订记录）
 
 工作台遵循[语义化版本](https://semver.org/lang/zh-CN/)（详见 [CHANGELOG.md](CHANGELOG.md)）：
 主版本号 = 不兼容的流程/目录变更；次版本号 = 新增 agent/命令/能力；修订号 = 修复与文档。
-每个版本都有对应的 git tag（`v1.0.0`、`v1.1.0`…）。插件用户升级：`claude plugin update short-drama-studio`；
+每个版本都有对应的 git tag（`v1.0.0`、`v1.1.0`…）。插件用户升级：`claude plugin update film-studio`；
 需要锁定旧版本时用 `claude plugin marketplace add <repo>@v<版本>`。

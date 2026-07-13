@@ -1,16 +1,18 @@
 {
-  "name": "short-drama-studio",
-  "displayName": "短剧工作台 Short Drama Studio",
-  "description": "AI 短剧创作全流程工作台：11 个影视专业 agent + 分阶段命令，从一句话创意到剧本、分镜、设定图、即梦视频生成、Suno 配乐、剪映精剪、抖音发布，内置四道防误操作门禁",
-  "version": "1.4.1",
+  "name": "film-studio",
+  "displayName": "影视工作台 Film Studio",
+  "description": "AI 影视创作全流程工作台（短剧/电影短片/动漫番剧）：11 个影视专业 agent + 分阶段命令，从一句话创意到剧本、分镜、设定图、即梦视频生成、Suno 配乐、剪映精剪、抖音发布，内置四道防误操作门禁",
+  "version": "2.0.0",
   "author": {
     "name": "zq940222",
     "url": "https://github.com/zq940222"
   },
-  "homepage": "https://github.com/zq940222/Claude-Code-Short-Drama-Studios",
-  "repository": "https://github.com/zq940222/Claude-Code-Short-Drama-Studios",
+  "homepage": "https://github.com/zq940222/Claude-Code-Film-Studio",
+  "repository": "https://github.com/zq940222/Claude-Code-Film-Studio",
   "keywords": [
+    "film",
     "short-drama",
+    "anime",
     "video-generation",
     "seedance",
     "dreamina",

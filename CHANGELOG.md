@@ -1,5 +1,21 @@
 # 更新日志
 
+## [2.0.0] - 2026-07-13
+
+### 不兼容变更（更名）
+- **插件更名**：short-drama-studio → **film-studio**（影视工作台）；GitHub 仓库更名为
+  `Claude-Code-Film-Studio`（旧地址自动重定向）；marketplace.json 增加 `renames` 记录旧名映射。
+  旧用户迁移：`claude plugin marketplace update short-drama-studio` 走 renames，或卸载重装
+
+### 新增
+- **多创作形态**：建项时选择 短剧（short-drama）/ 电影短片（short-film）/ 动漫番剧（anime），
+  写入 `project.json.format.medium`
+  - 编剧按形态切换创作法则：短剧（黄金3秒/反转密度）、电影短片（三幕/视听叙事/留白）、动漫（情绪峰值/内心独白/章节感）
+  - 导演按形态调整镜头语言：竖屏近景 / 横屏丰富景别 / 漫画式夸张构图
+  - 美术按形态定视觉基调：动漫形态在 style-bible 锁定二次元流派关键词并逐字复用，防画风漂移
+  - 摄影提示词、运营平台策略（抖音/快手、B站/视频号、B站+切片）同步按形态适配
+  - 老项目无 medium 字段时默认 short-drama，完全向下兼容
+
 本工作台遵循[语义化版本](https://semver.org/lang/zh-CN/)：
 
 - **主版本号**：不兼容的流程/目录结构变更（老项目需要迁移）

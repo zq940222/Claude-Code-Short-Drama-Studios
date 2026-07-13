@@ -1,8 +1,20 @@
-# 短剧工作台（Short Drama Studio）工作区
+# 影视工作台（Film Studio）工作区
 
-<!-- 本文件由 short-drama-studio 插件的 /new-drama 建项时生成，是本工作区的创作规范 -->
+<!-- 本文件由 film-studio 插件的 /new-drama 建项时生成，是本工作区的创作规范 -->
 
-这是一个 AI 短剧创作工作区。通过 short-drama-studio 插件的 11 个影视专业 agent 和分阶段命令，完成从创意到平台发布的全流程：剧本 → 分镜 → 设定图 → 视频生成 → 配乐 → 审片 → 粗剪 → 剪映精剪（自动生成草稿）→ 抖音发布。
+这是一个 AI 影视创作工作区，支持三种创作形态：**短剧 / 电影短片 / 动漫番剧**。通过 film-studio 插件的 11 个影视专业 agent 和分阶段命令，完成从创意到平台发布的全流程：剧本 → 分镜 → 设定图 → 视频生成 → 配乐 → 审片 → 粗剪 → 剪映精剪（自动生成草稿）→ 平台发布。
+
+## 创作形态（project.json 的 format.medium）
+
+建项时选定，编剧/导演/美术/摄影/运营按形态自动切换法则：
+
+| medium | 形态 | 创作法则要点 | 视觉基调 | 主发布平台 |
+|---|---|---|---|---|
+| `short-drama` | 短剧 | 黄金3秒、高反转密度、卡点钩子 | 写实、竖屏近景 | 抖音/快手 |
+| `short-film` | 电影短片 | 三幕结构、视听叙事、留白 | 电影感、横屏、景别丰富 | B站/视频号 |
+| `anime` | 动漫番剧 | 情绪峰值、内心独白、章节感 | 二次元画风（style-bible 锁定流派，逐字复用防漂移） | B站 + 抖音切片 |
+
+老项目 project.json 无 medium 字段时默认 `short-drama`。
 
 ## 创作流水线
 
@@ -22,8 +34,8 @@
 | Agent | 角色 | 职责 |
 |---|---|---|
 | producer | 制片人 | 建项、进度跟踪、积分预算、门禁把关 |
-| screenwriter | 编剧 | 大纲、人物小传、分集剧本、台词 |
-| director | 导演 | 分镜表：景别、运镜、时长、节奏 |
+| screenwriter | 编剧 | 大纲、人物小传、分集剧本、台词（按形态切换创作法则） |
+| director | 导演 | 分镜表：景别、运镜、时长、节奏（按形态调整镜头语言） |
 | art-director | 美术指导 | 角色/场景设定图（Gemini 网页端），视觉一致性 |
 | cinematographer | 摄影指导 | 分镜 → Seedance 2.0 提示词 → shotlist.json |
 | video-generator | 视频生成师 | 按 shotlist 调 dreamina CLI 生成、轮询、下载 |
@@ -52,8 +64,8 @@
 ## 项目目录规范
 
 ```
-projects/<剧名>/
-├── project.json           # 项目档案：画幅、时长、集数、各阶段状态
+projects/<片名>/
+├── project.json           # 项目档案：创作形态(medium)、画幅、时长、集数、各阶段状态
 ├── 01-script/             # outline.md, characters.md, ep01.md ...
 ├── 02-storyboard/         # ep01-storyboard.md ...
 ├── 03-design/             # characters/<角色>-*.png, scenes/<场景>-*.png, style-bible.md
