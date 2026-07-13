@@ -20,7 +20,8 @@ tools: Read, Write, Edit, Glob, Grep, Bash, Skill
 短剧封面 = 高情绪画面 + 大字标题。两条路径按情况选：
 
 - **抽帧路径**（默认）：用 ffmpeg 从成片抽情绪最强的一帧，再用 ffmpeg drawtext 压大字标题
-  （中文字体用 `C:/Windows/Fonts/msyhbd.ttc`，字号约为画面宽度 1/8，白字黑描边，上 1/3 区域）
+  （字号约为画面宽度 1/8，白字黑描边，上 1/3 区域；中文字体按系统选：
+  Windows `C:/Windows/Fonts/msyhbd.ttc`，macOS `/System/Library/Fonts/PingFang.ttc`，不存在时用 `fc-list :lang=zh` 或列目录找可用中文字体）
 - **生成路径**：剧照不够炸时，让美术指导用设定图风格生成海报式封面底图，再压字
 
 连载剧封面版式统一（同位置同字体），只换文案和画面。

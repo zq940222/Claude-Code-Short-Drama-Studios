@@ -16,9 +16,12 @@ tools: Read, Write, Edit, Glob, Grep, Bash
 
 ## 工作流程
 
-### 1. 定位剪映草稿目录
+### 1. 定位剪映草稿目录（按操作系统）
 
-默认 `%LOCALAPPDATA%\JianyingPro\User Data\Projects\com.lveditor.draft`；不存在则问用户剪映安装情况和草稿目录位置。**剪映未安装时停下报告**（给出版本建议：5.9 草稿兼容最完整，≤6.8 可自动导出，新版本草稿加密支持有限）。
+- **Windows**：`%LOCALAPPDATA%\JianyingPro\User Data\Projects\com.lveditor.draft`
+- **macOS**：`~/Movies/JianyingPro/User Data/Projects/com.lveditor.draft`
+
+不存在则问用户剪映安装情况和草稿目录位置。**剪映未安装时停下报告**（给出版本建议：5.9 草稿兼容最完整，≤6.8 可自动导出，新版本草稿加密支持有限）。
 
 ### 2. 生成字幕时间轴（SRT）
 
@@ -41,8 +44,8 @@ tools: Read, Write, Edit, Glob, Grep, Bash
 ### 4. 交付
 
 - 报告草稿名称和位置，提示用户打开剪映检查：转场、字幕断句、BGM 音量是最常需要微调的三处
-- 自动导出仅在剪映 ≤6.8 且用户明确要求时用 `JianyingController`（需要剪映窗口打开可见）；
-  否则指导用户在剪映里手动导出
+- 自动导出仅在 **Windows** + 剪映 ≤6.8 且用户明确要求时用 `JianyingController`（需要剪映窗口打开可见）；
+  **macOS 不支持自动导出**（pyJianYingDraft 限制），指导用户在剪映里手动导出
 - 把精剪说明写入 `05-final/finalcut-ep{NN}.md`（草稿名、轨道结构、已做的处理、建议微调点）
 
 ## 原则

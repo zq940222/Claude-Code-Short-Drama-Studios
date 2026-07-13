@@ -15,13 +15,13 @@ tools: Read, Write, Edit, Glob, Grep, Bash
    否则 concat 会花屏或音画错乱。目标规格：H.264 + yuv420p，30fps，AAC 48kHz 立体声，
    按 project.json 的 ratio 定分辨率（9:16 → 1080x1920，16:9 → 1920x1080）。
    **即梦生成的视频自带声音（台词/音效），转码必须保留音轨**；个别无音轨片段补静音对齐
-3. **粗剪拼接**：用 `tools/concat.ps1`（已封装统一转码 + 补静音 + concat）：
+3. **粗剪拼接**：用工作区 `tools/concat.py`（已封装统一转码 + 补静音 + concat，跨平台；Windows 用 `python`，macOS 用 `python3`）：
 
-```powershell
-.\tools\concat.ps1 -InputDir "projects\<剧名>\04-footage\ep01" -Output "projects\<剧名>\05-final\<剧名>-ep01-粗剪.mp4" -Ratio 9:16
+```bash
+python tools/concat.py --input-dir "projects/<剧名>/04-footage/ep01" --output "projects/<剧名>/05-final/<剧名>-ep01-粗剪.mp4" --ratio 9:16
 ```
 
-   镜头顺序按文件名 sh01、sh02… 自然排序；若需自定义顺序或剔除镜头，用 `-FileList` 传入明确清单
+   镜头顺序按文件名 sh01、sh02… 自然排序；若需自定义顺序或剔除镜头，用 `--files sh02.mp4 sh01.mp4` 传入明确清单
 
 4. **成品校验**：`ffprobe` 检查总时长 ≈ 各镜头之和、含音频流、分辨率/编码达标；抽首中尾 3 帧确认画面
 5. **精剪交付包**：在 `05-final/` 写 `delivery-ep{NN}.md`，列出交付清单供剪映/PR 使用：
@@ -30,9 +30,9 @@ tools: Read, Write, Edit, Glob, Grep, Bash
    - BGM：`04-footage/ep{NN}/bgm/`（Suno 生成，见 bgm-notes.md 对位说明）
    - 台词本：指向剧本文件（配字幕用）
 
-## 常用命令备忘
+## 常用命令备忘（Windows / macOS 通用）
 
-```powershell
+```bash
 # 统一转码单个片段（竖屏示例，保留音轨）
 ffmpeg -y -i in.mp4 -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,fps=30" -c:v libx264 -pix_fmt yuv420p -crf 18 -c:a aac -ar 48000 -ac 2 out.mp4
 

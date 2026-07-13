@@ -2,7 +2,7 @@
 
 [中文](README.md) | **English**
 
-![version](https://img.shields.io/badge/version-1.3.2-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%2B%20Windows-lightgrey)
+![version](https://img.shields.io/badge/version-1.4.0-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%7C%20Windows%20%7C%20macOS-lightgrey)
 
 An AI studio for creating short vertical dramas end-to-end inside Claude Code: from a one-line idea to platform publishing — script → storyboard → character/scene design → video generation → music → QC review → rough cut → JianYing (CapCut CN) fine cut (auto-generated draft) → Douyin publishing.
 
@@ -41,10 +41,10 @@ After installing, run `/new-drama` in **any working directory**: the first run b
 | `dreamina` CLI | Official Jimeng/Dreamina AIGC CLI for video generation (Seedance 2.0) | `dreamina user_credit` returns a balance when logged in; otherwise run `dreamina login` |
 | Google account (signed in via Chrome) | The art director drives the Gemini web app for design images (no Dreamina credits spent) | Browser can open gemini.google.com and chat |
 | Suno account (signed in via browser) | The composer drives the Suno web app to generate background music | Browser can open suno.com/create and generate |
-| JianYing (JianyingPro) | The fine-cut agent auto-generates JianYing drafts; 5.9 has the best draft compatibility, ≤6.8 supports auto-export, newer versions encrypt drafts (limited support) | JianYing installed locally and can open drafts |
-| `pyJianYingDraft` | Python library for JianYing draft generation | `python -c "import pyJianYingDraft"` succeeds (`python -m pip install pyJianYingDraft`) |
+| JianYing (JianyingPro, Windows or macOS) | The fine-cut agent auto-generates JianYing drafts; 5.9 has the best draft compatibility, ≤6.8 supports auto-export (Windows only; export manually on macOS), newer versions encrypt drafts (limited support) | JianYing installed locally and can open drafts |
+| Python 3.8+ with `pyJianYingDraft` | JianYing draft generation + cross-platform helper scripts (use `python` on Windows, `python3` on macOS) | `python -c "import pyJianYingDraft"` succeeds (`python -m pip install pyJianYingDraft`) |
 | Douyin Creator Center (signed in via browser) | The operator agent publishes semi-automatically (user confirmation required before publishing) | Browser can open creator.douyin.com while logged in |
-| `ffmpeg` / `ffprobe` | Local transcoding and concatenation | `ffmpeg -version` |
+| `ffmpeg` / `ffprobe` | Local transcoding and concatenation (Windows: winget/scoop; macOS: `brew install ffmpeg`) | `ffmpeg -version` |
 | `agent-browser` | Browser-automation CLI (used for Gemini design images / Suno music / Douyin publishing) | `agent-browser --help` |
 
 > Some Dreamina video models may return `AigcComplianceConfirmationRequired` on first use — complete the one-time content-safety authorization on the Dreamina website, then retry.
@@ -112,7 +112,7 @@ Every agent can be called individually — no need to run the full pipeline:
 ## Generation Engine Routing
 
 - **Design images** → Gemini web app, Nano Banana (browser automation, no credits); falls back to `dreamina text2image` with explicit notice when unavailable.
-  Gemini images carry a visible watermark in the bottom-right corner — they are cleaned with `tools/clean-refimg.ps1` and visually re-checked before entering the library, so the watermark never gets replicated into videos by Seedance
+  Gemini images carry a visible watermark in the bottom-right corner — they are cleaned with `tools/clean_refimg.py` and visually re-checked before entering the library, so the watermark never gets replicated into videos by Seedance
 - **Video** → Dreamina Seedance 2.0 (generated videos **include sound**: dialogue/SFX; the audio track is preserved through the whole pipeline):
   - Shots with characters → `multimodal2video` (references character design images for cross-shot consistency)
   - Empty scene/atmosphere shots → `text2video`
@@ -167,7 +167,7 @@ projects/<drama-title>/
 agents/                    # 11 professional agent definitions
 skills/                    # 11 staged slash commands
 templates/                 # Workspace convention template (copied as workspace CLAUDE.md by /new-drama)
-tools/                     # concat.ps1 (normalize + concat) and clean-refimg.ps1 (watermark cleanup), copied into workspaces
+tools/                     # concat.py (normalize + concat) and clean_refimg.py (watermark cleanup), cross-platform, copied into workspaces
 VERSION / CHANGELOG.md     # Version number and changelog
 requirements.txt           # Python dependency (pyJianYingDraft)
 docs/superpowers/specs/    # Design docs (with revision history)

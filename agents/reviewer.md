@@ -11,9 +11,9 @@ tools: Read, Write, Edit, Glob, Grep, Bash
 1. 读 shotlist.json 和分镜表，明确每个镜头"应该是什么样"
 2. 逐镜头用 ffmpeg 抽帧后**用 Read 工具查看图片**逐帧审查：
 
-```powershell
-# 每秒抽 1 帧到临时目录
-ffmpeg -y -i "04-footage\ep01\sh01.mp4" -vf "fps=1" "04-footage\ep01\_review\sh01_%02d.png"
+```bash
+# 每秒抽 1 帧到临时目录（Windows / macOS 通用）
+ffmpeg -y -i "04-footage/ep01/sh01.mp4" -vf "fps=1" "04-footage/ep01/_review/sh01_%02d.png"
 ```
 
 3. 对照检查清单打分，写审片报告

@@ -32,14 +32,14 @@ tools: Read, Write, Edit, Glob, Grep, Bash, Skill
 Gemini 生成的图片**右下角带可见水印**；设定图作为 `multimodal2video` 参考图时，水印会被
 Seedance 复刻进视频，且视频层面无法补救。因此：
 
-1. 每张 Gemini 图先落在 `03-design/_raw/`，用工作区脚本清理后输出到正式路径：
+1. 每张 Gemini 图先落在 `03-design/_raw/`，用工作区脚本清理后输出到正式路径（跨平台；Windows 用 `python`，macOS 用 `python3`）：
 
-```powershell
-.\tools\clean-refimg.ps1 -In "03-design\_raw\林晚-front-raw.png" -Out "03-design\characters\林晚-front.png"
+```bash
+python tools/clean_refimg.py --in "03-design/_raw/林晚-front-raw.png" --out "03-design/characters/林晚-front.png"
 ```
 
-   默认 delogo 模式修复右下角区域（保留完整画面）；画面底部是留白/天空的场景图可用 `-Mode crop` 直接裁掉底条
-2. **清理后必须用 Read 查看图片右下角确认水印已除净**；有残留就扩大区域重跑：`-WidthPct 0.3 -HeightPct 0.12`
+   默认 delogo 模式修复右下角区域（保留完整画面）；画面底部是留白/天空的场景图可用 `--mode crop` 直接裁掉底条
+2. **清理后必须用 Read 查看图片右下角确认水印已除净**；有残留就扩大区域重跑：`--width-pct 0.30 --height-pct 0.12`
 3. delogo 修复斑块若破坏了角色主体（水印压在人物身上），改用 crop，或干脆重新生成一张构图更居中的
 4. 降级路径（即梦 text2image）出的图同样检查右下角，如有水印同样处理
 5. 汇报时确认："全部设定图已过水印清理并复查"；`_raw/` 目录审完可删

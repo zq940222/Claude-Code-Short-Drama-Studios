@@ -2,7 +2,7 @@
 
 **中文** | [English](README.en.md)
 
-![version](https://img.shields.io/badge/version-1.3.2-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%2B%20Windows-lightgrey)
+![version](https://img.shields.io/badge/version-1.4.0-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%7C%20Windows%20%7C%20macOS-lightgrey)
 
 在 Claude Code 中完成短剧创作全流程的 AI 工作台：从一句话创意到平台发布——剧本 → 分镜 → 角色/场景设定图 → 视频生成 → 配乐 → 审片 → 粗剪 → 剪映精剪（自动生成草稿）→ 抖音发布。
 
@@ -39,10 +39,10 @@ claude plugin install short-drama-studio@short-drama-studio
 | `dreamina` CLI | 即梦官方 AIGC CLI，负责视频生成（Seedance 2.0） | `dreamina user_credit` 能返回余额即已登录；未登录先 `dreamina login` |
 | Google 账号（Chrome 已登录） | 美术指导通过浏览器自动化操作 Gemini 网页端画设定图（不耗即梦积分） | 浏览器能正常打开 gemini.google.com 并对话 |
 | Suno 账号（浏览器已登录） | 配乐师通过浏览器自动化操作 Suno 网页端生成背景音乐 | 浏览器能正常打开 suno.com/create 并生成 |
-| 剪映（JianyingPro） | 精剪师自动生成剪映草稿；5.9 草稿兼容最完整，≤6.8 支持自动导出，新版草稿加密支持有限 | 本机已安装剪映，能打开草稿 |
-| `pyJianYingDraft` | 剪映草稿生成 Python 库 | `python -c "import pyJianYingDraft"` 不报错（`python -m pip install pyJianYingDraft`） |
+| 剪映（JianyingPro，Windows/macOS 均可） | 精剪师自动生成剪映草稿；5.9 草稿兼容最完整，≤6.8 支持自动导出（仅 Windows；macOS 手动导出），新版草稿加密支持有限 | 本机已安装剪映，能打开草稿 |
+| Python 3.8+ 与 `pyJianYingDraft` | 剪映草稿生成 + 跨平台工具脚本（Windows 命令用 `python`，macOS 用 `python3`） | `python -c "import pyJianYingDraft"` 不报错（`python -m pip install pyJianYingDraft`） |
 | 抖音创作者中心（浏览器已登录） | 运营 agent 半自动发布（发布前必经用户确认） | 浏览器能打开 creator.douyin.com 且已登录 |
-| `ffmpeg` / `ffprobe` | 本地转码与拼接 | `ffmpeg -version` |
+| `ffmpeg` / `ffprobe` | 本地转码与拼接（Windows: winget/scoop；macOS: `brew install ffmpeg`） | `ffmpeg -version` |
 | `agent-browser` | 浏览器自动化 CLI（Gemini 设定图 / Suno 配乐 / 抖音发布均依赖） | `agent-browser --help` |
 
 > 首次使用某些即梦视频模型可能返回 `AigcComplianceConfirmationRequired`，需先去即梦 Web 端完成一次内容安全授权。
@@ -110,7 +110,7 @@ claude plugin install short-drama-studio@short-drama-studio
 ## 生成引擎分工
 
 - **设定图** → Gemini 网页端 Nano Banana（浏览器自动化，免积分）；不可用时降级 `dreamina text2image` 并明确告知。
-  Gemini 出图右下角有水印，入库前自动用 `tools/clean-refimg.ps1` 清理并复查，避免水印被 Seedance 复刻进视频
+  Gemini 出图右下角有水印，入库前自动用 `tools/clean_refimg.py` 清理并复查，避免水印被 Seedance 复刻进视频
 - **视频** → 即梦 Seedance 2.0（生成的视频**自带声音**：台词/音效，全流程保留音轨）：
   - 含角色镜头 → `multimodal2video`（引用角色设定图，保证跨镜头角色一致性）
   - 纯场景空镜 → `text2video`
@@ -165,7 +165,7 @@ projects/<剧名>/
 agents/                    # 11 个专业 agent 定义
 skills/                    # 11 个阶段 slash 命令
 templates/                 # 工作区规范模板（/new-drama 建项时复制为工作区 CLAUDE.md）
-tools/                     # concat.ps1（转码拼接）+ clean-refimg.ps1（水印清理），建项时复制进工作区
+tools/                     # concat.py（转码拼接）+ clean_refimg.py（水印清理），跨平台，建项时复制进工作区
 VERSION / CHANGELOG.md     # 版本号与更新日志
 requirements.txt           # Python 依赖（pyJianYingDraft）
 docs/superpowers/specs/    # 设计文档（含修订记录）

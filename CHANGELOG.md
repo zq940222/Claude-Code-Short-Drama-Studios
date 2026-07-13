@@ -8,6 +8,17 @@
 
 每次升级：更新 `VERSION` → 在此记录变更 → `git tag v<版本> && git push --tags`。
 
+## [1.4.0] - 2026-07-13
+
+### 新增
+- **macOS 支持**：工作台全流程可在 Mac 上运行
+  - 工具脚本从 PowerShell 迁移为跨平台 Python（`tools/concat.py`、`tools/clean_refimg.py`，删除 .ps1），
+    功能等价并实测（混合规格/无音轨补静音/水印两模式）
+  - 精剪师：剪映草稿目录按系统定位（macOS `~/Movies/JianyingPro/...`）；自动导出标注仅 Windows 支持，macOS 手动导出
+  - 运营：封面中文字体按系统选择（Windows 微软雅黑 / macOS 苹方）
+  - 各 agent/skill 命令示例改为两平台通用写法；工作区规范补充双平台环境说明
+- 仓库开发规则新增跨平台约束（工具只用 Python stdlib + ffmpeg）
+
 ## [1.3.2] - 2026-07-13
 
 ### 文档

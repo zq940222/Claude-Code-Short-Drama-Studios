@@ -36,7 +36,7 @@
 ## 生成引擎分工（按任务类型）
 
 - **设定图**（角色三视图、场景概念图）→ Gemini 网页端 Nano Banana（`agent-browser` 浏览器自动化，省即梦积分）；不可用时降级 `dreamina text2image` 并告知用户。
-  **Gemini 出图右下角有水印，入库前必须用 `tools/clean-refimg.ps1` 清理并肉眼复查**——带水印的参考图会被 Seedance 复刻进视频且无法补救；原始图放 `03-design/_raw/`，只有清理过的图才能进 `characters/`、`scenes/`
+  **Gemini 出图右下角有水印，入库前必须用 `tools/clean_refimg.py` 清理并肉眼复查**——带水印的参考图会被 Seedance 复刻进视频且无法补救；原始图放 `03-design/_raw/`，只有清理过的图才能进 `characters/`、`scenes/`
 - **视频片段** → 即梦 `dreamina` CLI（Seedance 2.0 家族），**生成的视频自带声音（台词/音效），全流程必须保留音轨**：
   - 纯场景空镜 → `text2video`
   - 含角色镜头 → `multimodal2video`（引用角色设定图保证一致性，image≤9）
@@ -79,10 +79,13 @@ projects/<剧名>/
 - `/finalcut` 精剪：自动生成剪映草稿（转场、BGM 对位、台词字幕、滤镜），**最终微调和导出由用户在剪映中完成**
 - `/publish` 发布：文案 + 封面 + 半自动上传，发布点击前必须用户确认
 
-## 环境
+## 环境（Windows / macOS 均支持）
 
 - `dreamina` CLI 已登录（OAuth 设备流），`dreamina <子命令> -h` 查参数
 - Gemini 网页端（设定图）、Suno 网页端（BGM）、抖音创作者中心（发布）需要浏览器已登录对应账号
-- `pyJianYingDraft`：`python -m pip install pyJianYingDraft`；剪映版本：5.9 草稿兼容最完整，≤6.8 支持自动导出，更新版本草稿加密支持有限
-- `ffmpeg` 8.x 在 PATH 中；拼接用工作区 `tools/concat.ps1`（建项时由插件复制而来）
-- Windows + PowerShell 环境，路径注意反斜杠与空格引号
+- Python 3.8+：Windows 命令用 `python`，macOS 用 `python3`（下文 `python` 按此对应）
+- `pyJianYingDraft`：`python -m pip install pyJianYingDraft`；剪映版本：5.9 草稿兼容最完整，≤6.8 支持自动导出（**仅 Windows**，macOS 需在剪映中手动导出），更新版本草稿加密支持有限
+- 剪映草稿目录：Windows `%LOCALAPPDATA%\JianyingPro\User Data\Projects\com.lveditor.draft`；macOS `~/Movies/JianyingPro/User Data/Projects/com.lveditor.draft`
+- `ffmpeg` 在 PATH 中（Windows: winget/scoop；macOS: `brew install ffmpeg`）；拼接用工作区 `tools/concat.py`（建项时由插件复制而来）
+- 封面中文字体：Windows `C:/Windows/Fonts/msyhbd.ttc`；macOS `/System/Library/Fonts/PingFang.ttc`
+- 路径含中文/空格时注意加引号；脚本示例统一用正斜杠路径（两平台通用）

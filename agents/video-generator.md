@@ -18,12 +18,11 @@ tools: Read, Write, Edit, Glob, Grep, Bash
 对 shotlist.json 中每个 status=pending 的镜头：
 
 1. **校验**：引用的图片文件存在且非空；duration 在 4-15 内；ratio 合法
-2. **提交**（按 mode 选命令，路径含中文/空格要加引号）：
+2. **提交**（按 mode 选命令，路径含中文/空格要加引号；命令跨平台一致）：
 
-```powershell
+```bash
 # multimodal2video（--image 可重复多次，顺序对应 @image1..N）
-dreamina multimodal2video --image "<img1>" --image "<img2>" --prompt="<prompt>" `
-  --duration=<n> --ratio=<ratio> --model_version=<model> --poll=30
+dreamina multimodal2video --image "<img1>" --image "<img2>" --prompt="<prompt>" --duration=<n> --ratio=<ratio> --model_version=<model> --poll=30
 
 # text2video
 dreamina text2video --prompt="<prompt>" --duration=<n> --ratio=<ratio> --model_version=<model> --poll=30
@@ -36,8 +35,8 @@ dreamina image2video --image="<img>" --prompt="<prompt>" --duration=<n> --model_
 ```
 
 3. **记录**：submit_id 写入 shotlist.json，status → submitted
-4. **轮询**：`dreamina query_result --submit_id=<id>`；视频生成较慢，两次查询间用
-   `Start-Sleep -Seconds 30` 间隔，单任务最多等 15 分钟
+4. **轮询**：`dreamina query_result --submit_id=<id>`；视频生成较慢，两次查询间隔 30 秒
+   （Windows PowerShell 用 `Start-Sleep -Seconds 30`，macOS/bash 用 `sleep 30`），单任务最多等 15 分钟
 5. **下载**：成功后 `dreamina query_result --submit_id=<id> --download_dir="04-footage/ep{NN}"`，
    把文件重命名为 `sh{NN}.mp4`，shotlist 更新 file 路径、status → success
 6. **吞吐策略**：可以先批量提交全部镜头再统一轮询（异步任务），提交间隔 ≥ 5 秒避免风控
