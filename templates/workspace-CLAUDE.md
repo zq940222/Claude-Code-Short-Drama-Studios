@@ -56,7 +56,8 @@
   - **模型默认走 VIP 通道防排队**：常规镜头 `seedance2.0fast_vip`，重点镜头 `seedance2.0_vip`；
     非 VIP 通道（`seedance2.0fast`/`seedance2.0`）仅在用户明确要求省积分且不赶时间时用
 - **背景音乐** → Suno 网页端（`agent-browser` 浏览器自动化）；BGM 是精剪素材，不混入粗剪
-- **精剪** → `pyJianYingDraft`（Python 库）生成剪映草稿工程，用户在剪映中微调导出
+- **精剪** → 检测到 DaVinci Resolve Studio（**推荐**，官方 Python API，可自动渲染导出）则优先征询使用；
+  否则默认 `pyJianYingDraft` 生成剪映草稿（不推销 Resolve），用户在剪映中微调导出
 - **平台发布** → 抖音创作者中心等网页端（`agent-browser` 浏览器自动化，半自动：发布前门禁④确认）
 - **文生文**（剧本/分镜/提示词/发布文案）→ Claude 本体
 - Seedance 提示词写作规范见 `seedance-prompt-en` 技能
@@ -90,7 +91,7 @@ projects/<片名>/
 ## 交付边界
 
 - `/edit` 粗剪：顺序硬切拼接、保留即梦原声、无字幕，快速预览用
-- `/finalcut` 精剪：自动生成剪映草稿（转场、BGM 对位、台词字幕、滤镜），**最终微调和导出由用户在剪映中完成**
+- `/finalcut` 精剪：自动组装精剪工程（转场、BGM 对位、台词字幕、滤镜）——Resolve 路径可授权自动渲染成片；剪映路径**最终微调和导出由用户在剪映中完成**
 - `/publish` 发布：文案 + 封面 + 半自动上传，发布点击前必须用户确认
 
 ## 环境（Windows / macOS 均支持）
@@ -99,6 +100,7 @@ projects/<片名>/
 - Gemini 网页端（设定图）、Suno 网页端（BGM）、抖音创作者中心（发布）需要浏览器已登录对应账号
 - Python 3.8+：Windows 命令用 `python`，macOS 用 `python3`（下文 `python` 按此对应）
 - `pyJianYingDraft`：`python -m pip install pyJianYingDraft`；剪映版本：5.9 草稿兼容最完整，≤6.8 支持自动导出（**仅 Windows**，macOS 需在剪映中手动导出），更新版本草稿加密支持有限
+- （可选）DaVinci Resolve **Studio**：装了并运行时精剪走官方 API（外部脚本控制仅 Studio 版支持，免费版不行）；未装不影响任何流程
 - 剪映草稿目录：Windows `%LOCALAPPDATA%\JianyingPro\User Data\Projects\com.lveditor.draft`；macOS `~/Movies/JianyingPro/User Data/Projects/com.lveditor.draft`
 - `ffmpeg` 在 PATH 中（Windows: winget/scoop；macOS: `brew install ffmpeg`）；拼接用工作区 `tools/concat.py`（建项时由插件复制而来）
 - 封面中文字体：Windows `C:/Windows/Fonts/msyhbd.ttc`；macOS `/System/Library/Fonts/PingFang.ttc`

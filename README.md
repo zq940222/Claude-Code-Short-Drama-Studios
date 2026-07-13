@@ -2,7 +2,7 @@
 
 **中文** | [English](README.en.md)
 
-![version](https://img.shields.io/badge/version-2.0.0-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%7C%20Windows%20%7C%20macOS-lightgrey)
+![version](https://img.shields.io/badge/version-2.1.0-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%7C%20Windows%20%7C%20macOS-lightgrey)
 
 在 Claude Code 中完成影视创作全流程的 AI 工作台，支持三种创作形态：**短剧 / 电影短片 / 动漫番剧**。从一句话创意到平台发布——剧本 → 分镜 → 角色/场景设定图 → 视频生成 → 配乐 → 审片 → 粗剪 → 剪映精剪（自动生成草稿）→ 平台发布。
 
@@ -45,6 +45,7 @@ claude plugin install film-studio@film-studio
 | 剪映（JianyingPro，Windows/macOS 均可） | 精剪师自动生成剪映草稿；5.9 草稿兼容最完整，≤6.8 支持自动导出（仅 Windows；macOS 手动导出），新版草稿加密支持有限 | 本机已安装剪映，能打开草稿 |
 | Python 3.8+ 与 `pyJianYingDraft` | 剪映草稿生成 + 跨平台工具脚本（Windows 命令用 `python`，macOS 用 `python3`） | `python -c "import pyJianYingDraft"` 不报错（`python -m pip install pyJianYingDraft`） |
 | 抖音创作者中心（浏览器已登录） | 运营 agent 半自动发布（发布前必经用户确认） | 浏览器能打开 creator.douyin.com 且已登录 |
+| （可选）DaVinci Resolve Studio | 精剪推荐路径：官方 Python API 自动建时间线 + 自动渲染导出；外部脚本控制仅 Studio 付费版支持，未装则精剪走剪映 | Resolve 运行中且 `import DaVinciResolveScript` 可连接 |
 | `ffmpeg` / `ffprobe` | 本地转码与拼接（Windows: winget/scoop；macOS: `brew install ffmpeg`） | `ffmpeg -version` |
 | `agent-browser` | 浏览器自动化 CLI（Gemini 设定图 / Suno 配乐 / 抖音发布均依赖） | `agent-browser --help` |
 
@@ -82,7 +83,7 @@ claude plugin install film-studio@film-studio
 | `/music` | Suno 网页端生成 BGM + 对位说明 | - |
 | `/review` | 抽帧质检、一致性检查、回炉清单 | 回炉需再过门禁③ |
 | `/edit` | 统一转码、粗剪拼接（保留原声）、精剪交付包 | - |
-| `/finalcut` | pyJianYingDraft 自动生成剪映草稿（转场/BGM/字幕/滤镜） | - |
+| `/finalcut` | 自动组装精剪工程：Resolve Studio（推荐，可自动渲染）或剪映草稿（默认） | - |
 | `/publish` | 发布文案、封面图、半自动发布抖音等平台 | ④ 发布前确认 |
 | `/studio-status` | 全项目进度 + 积分余额总览 | - |
 
@@ -98,7 +99,7 @@ claude plugin install film-studio@film-studio
 | video-generator | 视频生成师 | 调 dreamina 提交/轮询/下载/重试，实时记账 |
 | composer | 配乐师 | Suno 网页端生成 BGM、对位说明 |
 | editor | 剪辑师 | ffmpeg 统一编码、粗剪拼接（保留原声）、精剪交付包 |
-| finalcut | 精剪师 | pyJianYingDraft 生成剪映草稿：转场、BGM 对位、字幕轨、滤镜 |
+| finalcut | 精剪师 | 自动组装精剪工程（Resolve API 或剪映草稿）：转场、BGM 对位、字幕轨、滤镜 |
 | reviewer | 审片人 | 抽帧质检：畸变、角色一致性、连贯性 |
 | operator | 运营 | 发布文案、封面图、半自动发布（抖音/快手/视频号） |
 
@@ -120,7 +121,8 @@ claude plugin install film-studio@film-studio
   - 精确首尾画面 → `frames2video`
   - 默认走 VIP 通道防排队：常规镜头 `seedance2.0fast_vip`，重点镜头 `seedance2.0_vip`；不赶时间想省积分可退回非 VIP 通道
 - **背景音乐** → Suno 网页端（浏览器自动化）；BGM 作为独立素材交付，不混入粗剪
-- **精剪** → `pyJianYingDraft` 生成剪映草稿工程（转场/BGM 对位/字幕轨/滤镜），剪映中微调导出
+- **精剪** → 双路径：检测到 **DaVinci Resolve Studio**（推荐）走官方 Python API 建时间线、可自动渲染导出；
+  否则默认 `pyJianYingDraft` 生成剪映草稿（转场/BGM 对位/字幕轨/滤镜），剪映中微调导出——没装 Resolve 不影响任何流程
 - **平台发布** → 抖音创作者中心等网页端（浏览器自动化，发布前门禁④确认）
 - **文生文**（剧本/分镜/提示词/发布文案）→ Claude 本体
 
@@ -147,8 +149,8 @@ projects/<片名>/
 ## 范围说明（交付边界）
 
 - ✅ 粗剪预览（`/edit`）：顺序硬切拼接，**保留即梦原声（台词/音效）**，快速看节奏
-- ✅ 剪映精剪草稿（`/finalcut`）：自动组装转场、BGM 对位、台词字幕轨、全局滤镜——
-  打开剪映即可微调（常见微调点：转场、字幕断句、BGM 音量），**导出由用户在剪映中完成**
+- ✅ 精剪工程（`/finalcut`）：自动组装转场、BGM 对位、台词字幕轨、滤镜/调色建议——
+  Resolve 路径确认时间线后可**授权自动渲染成片**；剪映路径打开草稿微调（常见微调点：转场、字幕断句、BGM 音量）后**由用户导出**
 - ✅ 发布物料与半自动发布（`/publish`）：候选标题、话题标签、封面图、上传填单，**点击发布前必经确认**
 - ❌ 剪映账号 VIP 素材、平台登录操作 → 永远由用户本人完成
 

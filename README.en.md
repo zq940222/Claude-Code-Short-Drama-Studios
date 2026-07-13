@@ -2,7 +2,7 @@
 
 [中文](README.md) | **English**
 
-![version](https://img.shields.io/badge/version-2.0.0-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%7C%20Windows%20%7C%20macOS-lightgrey)
+![version](https://img.shields.io/badge/version-2.1.0-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%7C%20Windows%20%7C%20macOS-lightgrey)
 
 An AI studio for creating narrative video end-to-end inside Claude Code, in three formats: **short drama / short film / anime series**. From a one-line idea to platform publishing — script → storyboard → character/scene design → video generation → music → QC review → rough cut → JianYing (CapCut CN) fine cut (auto-generated draft) → publishing.
 
@@ -47,6 +47,7 @@ After installing, run `/new-drama` in **any working directory**: the first run b
 | JianYing (JianyingPro, Windows or macOS) | The fine-cut agent auto-generates JianYing drafts; 5.9 has the best draft compatibility, ≤6.8 supports auto-export (Windows only; export manually on macOS), newer versions encrypt drafts (limited support) | JianYing installed locally and can open drafts |
 | Python 3.8+ with `pyJianYingDraft` | JianYing draft generation + cross-platform helper scripts (use `python` on Windows, `python3` on macOS) | `python -c "import pyJianYingDraft"` succeeds (`python -m pip install pyJianYingDraft`) |
 | Douyin Creator Center (signed in via browser) | The operator agent publishes semi-automatically (user confirmation required before publishing) | Browser can open creator.douyin.com while logged in |
+| (Optional) DaVinci Resolve Studio | Recommended fine-cut path: official Python API builds the timeline and can auto-render; external scripting requires the paid Studio edition — without it, fine cut falls back to JianYing | Resolve running and `import DaVinciResolveScript` connects |
 | `ffmpeg` / `ffprobe` | Local transcoding and concatenation (Windows: winget/scoop; macOS: `brew install ffmpeg`) | `ffmpeg -version` |
 | `agent-browser` | Browser-automation CLI (used for Gemini design images / Suno music / Douyin publishing) | `agent-browser --help` |
 
@@ -84,7 +85,7 @@ Run `/studio-status` anytime to see project progress, credit balance, and to col
 | `/music` | Suno BGM + placement notes | - |
 | `/review` | Frame extraction QC, consistency checks, redo list | Redo passes Gate ③ again |
 | `/edit` | Normalize, rough-cut concat (audio preserved), delivery package | - |
-| `/finalcut` | Auto-generate JianYing draft via pyJianYingDraft (transitions/BGM/subtitles/filters) | - |
+| `/finalcut` | Auto-assemble the fine-cut project: DaVinci Resolve Studio (recommended, auto-render) or JianYing draft (default) | - |
 | `/publish` | Copy, cover image, semi-automatic publishing to Douyin etc. | ④ Pre-publish confirmation |
 | `/studio-status` | All-project progress + credit overview | - |
 
@@ -100,7 +101,7 @@ Run `/studio-status` anytime to see project progress, credit balance, and to col
 | video-generator | Video Generator | Drives dreamina submit/poll/download/retry with real-time accounting |
 | composer | Composer | Suno BGM + placement notes |
 | editor | Editor | ffmpeg normalization, rough-cut concat (audio preserved), delivery package |
-| finalcut | Fine-cut Editor | pyJianYingDraft JianYing drafts: transitions, BGM placement, subtitle track, filters |
+| finalcut | Fine-cut Editor | Auto-assembles the fine-cut project (Resolve API or JianYing draft): transitions, BGM placement, subtitle track, filters |
 | reviewer | Reviewer | Frame-level QC: artifacts, character consistency, continuity |
 | operator | Operator | Publishing copy, cover images, semi-automatic publishing (Douyin/Kuaishou/WeChat Channels) |
 
@@ -122,7 +123,7 @@ Every agent can be called individually — no need to run the full pipeline:
   - Exact first/last frames → `frames2video`
   - VIP channel by default to avoid queueing: `seedance2.0fast_vip` for regular shots, `seedance2.0_vip` for key shots; fall back to non-VIP models to save credits when not in a hurry
 - **Background music** → Suno web app (browser automation); BGM is delivered as separate material, not mixed into the rough cut
-- **Fine cut** → `pyJianYingDraft` generates a JianYing draft project (transitions/BGM placement/subtitle track/filters); fine-tune and export in JianYing
+- **Fine cut** → dual path: with **DaVinci Resolve Studio** detected (recommended), the official Python API builds the timeline and can auto-render the final film; otherwise `pyJianYingDraft` generates a JianYing draft (transitions/BGM placement/subtitle track/filters) by default — not having Resolve blocks nothing
 - **Publishing** → Douyin Creator Center and other web consoles (browser automation, Gate ④ confirmation before publishing)
 - **Text generation** (script/storyboard/prompts/copy) → Claude itself
 
@@ -149,8 +150,8 @@ projects/<title>/
 ## Scope (Delivery Boundary)
 
 - ✅ Rough-cut preview (`/edit`): hard-cut concatenation with **original Dreamina audio (dialogue/SFX) preserved**, for quick pacing checks
-- ✅ JianYing fine-cut draft (`/finalcut`): auto-assembled transitions, BGM placement, dialogue subtitle track, global filter —
-  open JianYing to fine-tune (usual touch-ups: transitions, subtitle line breaks, BGM volume); **export is done by you in JianYing**
+- ✅ Fine-cut project (`/finalcut`): auto-assembled transitions, BGM placement, dialogue subtitle track, filter/grading notes —
+  the Resolve path can **auto-render the final film after you approve the timeline**; the JianYing path opens as a draft for touch-ups (transitions, subtitle line breaks, BGM volume) and **you export it in JianYing**
 - ✅ Publishing materials and semi-automatic publishing (`/publish`): candidate titles, hashtags, cover image, upload and form filling — **publishing requires your confirmation**
 - ❌ JianYing VIP assets and platform logins → always done by you personally
 
