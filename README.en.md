@@ -2,7 +2,7 @@
 
 [中文](README.md) | **English**
 
-![version](https://img.shields.io/badge/version-1.4.0-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%7C%20Windows%20%7C%20macOS-lightgrey)
+![version](https://img.shields.io/badge/version-1.4.1-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%7C%20Windows%20%7C%20macOS-lightgrey)
 
 An AI studio for creating short vertical dramas end-to-end inside Claude Code: from a one-line idea to platform publishing — script → storyboard → character/scene design → video generation → music → QC review → rough cut → JianYing (CapCut CN) fine cut (auto-generated draft) → Douyin publishing.
 
@@ -117,7 +117,7 @@ Every agent can be called individually — no need to run the full pipeline:
   - Shots with characters → `multimodal2video` (references character design images for cross-shot consistency)
   - Empty scene/atmosphere shots → `text2video`
   - Exact first/last frames → `frames2video`
-  - Default `seedance2.0fast` (value), key shots `seedance2.0` (quality)
+  - VIP channel by default to avoid queueing: `seedance2.0fast_vip` for regular shots, `seedance2.0_vip` for key shots; fall back to non-VIP models to save credits when not in a hurry
 - **Background music** → Suno web app (browser automation); BGM is delivered as separate material, not mixed into the rough cut
 - **Fine cut** → `pyJianYingDraft` generates a JianYing draft project (transitions/BGM placement/subtitle track/filters); fine-tune and export in JianYing
 - **Publishing** → Douyin Creator Center and other web consoles (browser automation, Gate ④ confirmation before publishing)

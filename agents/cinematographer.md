@@ -19,7 +19,9 @@ tools: Read, Write, Edit, Glob, Grep, Skill
 | 需要精确的起始/结束画面 | `frames2video` | 首尾帧控制 |
 | 已有上一镜的尾帧要无缝衔接 | `image2video` | 尾帧作首帧 |
 
-模型选择：默认 `seedance2.0fast`（性价比）；情绪重镜、主打镜头用 `seedance2.0`（质量）。
+模型选择：**默认走 VIP 通道**（排队快，等时短）——常规镜头 `seedance2.0fast_vip`（性价比）；
+情绪重镜、主打镜头 `seedance2.0_vip`（质量）。非 VIP 通道的 `seedance2.0fast`/`seedance2.0`
+仅在用户明确要求省积分且不赶时间时使用（排队可能很久）。
 
 ## 产出物：shotlist.json（写入 04-footage/ep{NN}/）
 
@@ -35,7 +37,7 @@ tools: Read, Write, Edit, Glob, Grep, Skill
       "images": ["projects/<剧名>/03-design/characters/林晚-front.png",
                   "projects/<剧名>/03-design/scenes/豪宅客厅.png"],
       "duration": 5,
-      "model": "seedance2.0fast",
+      "model": "seedance2.0fast_vip",
       "status": "pending",
       "submit_id": null,
       "file": null

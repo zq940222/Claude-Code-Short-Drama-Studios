@@ -41,6 +41,8 @@
   - 纯场景空镜 → `text2video`
   - 含角色镜头 → `multimodal2video`（引用角色设定图保证一致性，image≤9）
   - 精确控制首尾画面 → `frames2video`
+  - **模型默认走 VIP 通道防排队**：常规镜头 `seedance2.0fast_vip`，重点镜头 `seedance2.0_vip`；
+    非 VIP 通道（`seedance2.0fast`/`seedance2.0`）仅在用户明确要求省积分且不赶时间时用
 - **背景音乐** → Suno 网页端（`agent-browser` 浏览器自动化）；BGM 是精剪素材，不混入粗剪
 - **精剪** → `pyJianYingDraft`（Python 库）生成剪映草稿工程，用户在剪映中微调导出
 - **平台发布** → 抖音创作者中心等网页端（`agent-browser` 浏览器自动化，半自动：发布前门禁④确认）
