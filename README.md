@@ -15,7 +15,7 @@
 | `pyJianYingDraft` | 剪映草稿生成 Python 库 | `python -c "import pyJianYingDraft"` 不报错（`python -m pip install pyJianYingDraft`） |
 | 抖音创作者中心（浏览器已登录） | 运营 agent 半自动发布（发布前必经用户确认） | 浏览器能打开 creator.douyin.com 且已登录 |
 | `ffmpeg` / `ffprobe` | 本地转码与拼接 | `ffmpeg -version` |
-| `agent-browser` | 浏览器自动化 CLI（Gemini 网页端自动化用） | `agent-browser --help` |
+| `agent-browser` | 浏览器自动化 CLI（Gemini 设定图 / Suno 配乐 / 抖音发布均依赖） | `agent-browser --help` |
 
 > 首次使用某些即梦视频模型可能返回 `AigcComplianceConfirmationRequired`，需先去即梦 Web 端完成一次内容安全授权。
 
@@ -76,6 +76,8 @@
 - "让编剧把第 3 集结尾的反转改得更狠"
 - "让审片人重新检查 ep01 的 sh05"
 - "让剪辑师把 sh03 从成片里去掉重新拼"
+- "让精剪师把 ep01 的字幕字号调大重新出草稿"
+- "让运营重新写 3 个更炸的标题"
 
 ## 生成引擎分工
 
@@ -131,9 +133,10 @@ projects/<剧名>/
 
 ```
 CLAUDE.md                  # 工作台总规范（Claude Code 自动加载）
-.claude/agents/            # 8 个专业 agent 定义
-.claude/skills/            # 8 个阶段 slash 命令
+.claude/agents/            # 11 个专业 agent 定义
+.claude/skills/            # 11 个阶段 slash 命令
 tools/concat.ps1           # ffmpeg 统一转码 + 拼接脚本
-docs/superpowers/specs/    # 设计文档
-projects/                  # 你的短剧项目（视频产物不入 git）
+requirements.txt           # Python 依赖（pyJianYingDraft）
+docs/superpowers/specs/    # 设计文档（含修订记录）
+projects/                  # 你的短剧项目（音视频产物不入 git）
 ```
