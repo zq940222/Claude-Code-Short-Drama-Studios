@@ -1,6 +1,8 @@
 # 短剧工作台（Short Drama Studio）
 
-![version](https://img.shields.io/badge/version-1.3.1-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%2B%20Windows-lightgrey)
+**中文** | [English](README.en.md)
+
+![version](https://img.shields.io/badge/version-1.3.2-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%2B%20Windows-lightgrey)
 
 在 Claude Code 中完成短剧创作全流程的 AI 工作台：从一句话创意到平台发布——剧本 → 分镜 → 角色/场景设定图 → 视频生成 → 配乐 → 审片 → 粗剪 → 剪映精剪（自动生成草稿）→ 抖音发布。
 
@@ -163,7 +165,7 @@ projects/<剧名>/
 agents/                    # 11 个专业 agent 定义
 skills/                    # 11 个阶段 slash 命令
 templates/                 # 工作区规范模板（/new-drama 建项时复制为工作区 CLAUDE.md）
-tools/concat.ps1           # ffmpeg 统一转码 + 拼接脚本（建项时复制进工作区）
+tools/                     # concat.ps1（转码拼接）+ clean-refimg.ps1（水印清理），建项时复制进工作区
 VERSION / CHANGELOG.md     # 版本号与更新日志
 requirements.txt           # Python 依赖（pyJianYingDraft）
 docs/superpowers/specs/    # 设计文档（含修订记录）
