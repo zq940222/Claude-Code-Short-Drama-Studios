@@ -35,7 +35,8 @@
 
 ## 生成引擎分工（按任务类型）
 
-- **设定图**（角色三视图、场景概念图）→ Gemini 网页端 Nano Banana（`agent-browser` 浏览器自动化，省即梦积分）；不可用时降级 `dreamina text2image` 并告知用户
+- **设定图**（角色三视图、场景概念图）→ Gemini 网页端 Nano Banana（`agent-browser` 浏览器自动化，省即梦积分）；不可用时降级 `dreamina text2image` 并告知用户。
+  **Gemini 出图右下角有水印，入库前必须用 `tools/clean-refimg.ps1` 清理并肉眼复查**——带水印的参考图会被 Seedance 复刻进视频且无法补救；原始图放 `03-design/_raw/`，只有清理过的图才能进 `characters/`、`scenes/`
 - **视频片段** → 即梦 `dreamina` CLI（Seedance 2.0 家族），**生成的视频自带声音（台词/音效），全流程必须保留音轨**：
   - 纯场景空镜 → `text2video`
   - 含角色镜头 → `multimodal2video`（引用角色设定图保证一致性，image≤9）

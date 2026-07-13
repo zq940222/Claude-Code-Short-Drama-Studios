@@ -11,11 +11,13 @@ description: 设定图阶段。调度美术指导 agent 生成角色三视图和
 
 ## 流程
 
+0. 工作区缺 `tools/clean-refimg.ps1` 时，先从插件根（本技能目录上两级）的 `tools/clean-refimg.ps1` 复制过来
 1. 调度 **art-director** agent：
    - 先写/更新 `03-design/style-bible.md`（全剧视觉基调）
    - 按分镜表的角色/场景清单生成设定图：角色每人 front/side/face 三张，场景每处一张
    - 首选 Gemini 网页端（不耗积分），失败降级即梦 text2image
-2. 生成完毕后逐张用 Read 查看图片，向用户展示并汇报：哪些图走了哪个引擎、是否消耗积分
+   - **每张图入库前用 `tools/clean-refimg.ps1` 清理右下角水印并复查**（Gemini 图有可见水印，会被 Seedance 复刻进视频）
+2. 生成完毕后逐张用 Read 查看图片（重点看右下角无水印残留），向用户展示并汇报：哪些图走了哪个引擎、是否消耗积分
 3. **门禁②**：用 AskUserQuestion 明确问"设定图是否定稿？"
    - 定稿 → status.design → approved，提示下一步 `/shoot`
    - 不满意 → 收集具体意见（哪个角色/场景、什么问题），让美术指导重生成对应图，回到第 2 步

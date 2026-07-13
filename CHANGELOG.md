@@ -8,6 +8,15 @@
 
 每次升级：更新 `VERSION` → 在此记录变更 → `git tag v<版本> && git push --tags`。
 
+## [1.3.1] - 2026-07-13
+
+### 修复
+- **Gemini 设定图水印污染视频**：Gemini（Nano Banana）出图右下角带可见水印，作为 `multimodal2video`
+  参考图时会被 Seedance 复刻进视频。新增 `tools/clean-refimg.ps1`（delogo 修复右下角 / crop 裁底条两种模式），
+  美术指导入库前强制清理并肉眼复查；摄影指导禁止引用 `_raw/` 原始图；审片人检查清单新增"水印残留"维度
+- PowerShell 脚本改为 UTF-8 BOM 编码（Windows PowerShell 5.1 对无 BOM 中文脚本按 ANSI 解析会报错，
+  concat.ps1 同步修复）
+
 ## [1.3.0] - 2026-07-13
 
 ### 新增

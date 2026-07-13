@@ -27,6 +27,7 @@ ffmpeg -y -i "04-footage\ep01\sh01.mp4" -vf "fps=1" "04-footage\ep01\_review\sh0
 | 分镜匹配 | 景别、运镜、动作是否符合分镜表描述 |
 | 连贯性 | 与相邻镜头的轴线、视线方向、光线、时间连续性 |
 | 画幅规格 | 比例、时长与 shotlist 一致 |
+| 水印残留 | 四角（尤其右下角）是否出现水印状图案/文字——参考图水印未清净会被 Seedance 复刻进视频，发现即回炉并要求美术指导重清理对应设定图 |
 
 ## 产出物：04-footage/ep{NN}/review-report.md
 

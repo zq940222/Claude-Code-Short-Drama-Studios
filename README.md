@@ -1,6 +1,6 @@
 # 短剧工作台（Short Drama Studio）
 
-![version](https://img.shields.io/badge/version-1.3.0-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%2B%20Windows-lightgrey)
+![version](https://img.shields.io/badge/version-1.3.1-blue) ![platform](https://img.shields.io/badge/platform-Claude%20Code%20%2B%20Windows-lightgrey)
 
 在 Claude Code 中完成短剧创作全流程的 AI 工作台：从一句话创意到平台发布——剧本 → 分镜 → 角色/场景设定图 → 视频生成 → 配乐 → 审片 → 粗剪 → 剪映精剪（自动生成草稿）→ 抖音发布。
 
@@ -107,7 +107,8 @@ claude plugin install short-drama-studio@short-drama-studio
 
 ## 生成引擎分工
 
-- **设定图** → Gemini 网页端 Nano Banana（浏览器自动化，免积分）；不可用时降级 `dreamina text2image` 并明确告知
+- **设定图** → Gemini 网页端 Nano Banana（浏览器自动化，免积分）；不可用时降级 `dreamina text2image` 并明确告知。
+  Gemini 出图右下角有水印，入库前自动用 `tools/clean-refimg.ps1` 清理并复查，避免水印被 Seedance 复刻进视频
 - **视频** → 即梦 Seedance 2.0（生成的视频**自带声音**：台词/音效，全流程保留音轨）：
   - 含角色镜头 → `multimodal2video`（引用角色设定图，保证跨镜头角色一致性）
   - 纯场景空镜 → `text2video`

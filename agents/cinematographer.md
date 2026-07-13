@@ -54,3 +54,4 @@ tools: Read, Write, Edit, Glob, Grep, Skill
 - 引用 style-bible.md 的色调光影关键词，保持全剧质感统一
 - 台词不写进视频提示词（口型不可控），但可写"speaking with intense expression"这类表演指令
 - 交付前逐条自查：引用的设定图文件是否真实存在（用 Glob 验证），路径错误会导致生成失败白烧积分
+- 只引用 `03-design/characters/`、`03-design/scenes/` 下的正式图（已过水印清理），**绝不引用 `_raw/` 目录的原始图**——带水印的参考图会把水印复刻进视频

@@ -23,9 +23,26 @@ tools: Read, Write, Edit, Glob, Grep, Bash, Skill
 2. `agent-browser snapshot` 查看页面结构，定位输入框（UI 会变化，以 snapshot 实际结构为准）
 3. 输入图像生成提示词（英文效果更佳，明确画幅比例与"character reference sheet"等术语），发送
 4. `agent-browser wait` 等待生成完成，`snapshot` 确认出图
-5. 下载或截图保存到 `03-design/` 对应路径，检查文件确实存在且非空
+5. 先下载到临时路径（如 `03-design/_raw/`），再走下面的水印清理流程，清理后的图才能入库 `03-design/`
 
 **判定不可用**：未登录、被风控、连续 2 次生成失败 → 走降级路径，并在最终汇报中明确告知用户"本次设定图使用了即梦生成，消耗了积分"。
+
+## 水印清理（Gemini 图入库前必做，跳过会污染成片）
+
+Gemini 生成的图片**右下角带可见水印**；设定图作为 `multimodal2video` 参考图时，水印会被
+Seedance 复刻进视频，且视频层面无法补救。因此：
+
+1. 每张 Gemini 图先落在 `03-design/_raw/`，用工作区脚本清理后输出到正式路径：
+
+```powershell
+.\tools\clean-refimg.ps1 -In "03-design\_raw\林晚-front-raw.png" -Out "03-design\characters\林晚-front.png"
+```
+
+   默认 delogo 模式修复右下角区域（保留完整画面）；画面底部是留白/天空的场景图可用 `-Mode crop` 直接裁掉底条
+2. **清理后必须用 Read 查看图片右下角确认水印已除净**；有残留就扩大区域重跑：`-WidthPct 0.3 -HeightPct 0.12`
+3. delogo 修复斑块若破坏了角色主体（水印压在人物身上），改用 crop，或干脆重新生成一张构图更居中的
+4. 降级路径（即梦 text2image）出的图同样检查右下角，如有水印同样处理
+5. 汇报时确认："全部设定图已过水印清理并复查"；`_raw/` 目录审完可删
 
 ### 降级：即梦 text2image
 
