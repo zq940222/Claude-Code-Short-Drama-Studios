@@ -1,0 +1,2 @@
+# python -m pip install -r requirements.txt
+pyJianYingDraft   # 剪映草稿生成（/finalcut 精剪用）

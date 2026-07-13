@@ -93,6 +93,18 @@ projects/<剧名>/
 - 新增第 9 个 agent：composer 配乐师，用 Suno 网页端（agent-browser 浏览器自动化）生成 BGM，产出 `04-footage/ep{NN}/bgm/` + 对位说明；新增 `/music` 命令，剧本定稿后可与生成/审片并行
 - 交付边界修正：工作台产出**粗剪预览**（硬切、保留原声、无字幕）+ 精剪素材包（原始镜头、BGM、台词本）；最终精剪（配乐混音、字幕、转场、调色）在剪映/PR 完成，BGM 不混入粗剪
 
+**2026-07-13 修订 2**（功能扩展：剪映精剪 + 平台运营）：
+
+- 新增 finalcut 精剪师 agent + `/finalcut` 命令：用 pyJianYingDraft（调研结论：剪映自动化的事实标准，
+  各家剪映 MCP 均为其包装，直连库更稳）生成剪映草稿——视频轨+转场、BGM 轨（按对位说明压低音量）、
+  台词字幕轨（shotlist 时长累计 → SRT）、全局滤镜；用户在剪映中微调导出。
+  版本约束：剪映 5.9 草稿兼容最完整，≤6.8 支持 JianyingController 自动导出，新版草稿加密支持有限
+- 新增 operator 运营 agent + `/publish` 命令：发布文案（3 候选标题/话题标签/发布时段）、封面图
+  （成片抽帧 + ffmpeg drawtext 大字标题，或生成路径）、半自动发布抖音创作者中心
+  （agent-browser 自动化，**发布点击前门禁④用户确认**，登录永远由用户完成）
+- 新增目录：`06-publish/ep{NN}/`（copy.md、cover.png、publish-log.md）；`04-footage` 增加 ep{NN}.srt
+- 门禁从三道扩展为四道：④ 发布确认
+
 ## 测试/验收
 
 - 建项 → 各命令可独立触发对应 agent

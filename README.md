@@ -1,8 +1,8 @@
 # 短剧工作台（Short Drama Studio）
 
-在 Claude Code 中完成短剧创作全流程的 AI 工作台：从一句话创意到粗剪交付——剧本 → 分镜 → 角色/场景设定图 → 视频生成 → 配乐 → 审片 → 粗剪。最终精剪（配乐混音、字幕、调色）在剪映/PR 中完成。
+在 Claude Code 中完成短剧创作全流程的 AI 工作台：从一句话创意到平台发布——剧本 → 分镜 → 角色/场景设定图 → 视频生成 → 配乐 → 审片 → 粗剪 → 剪映精剪（自动生成草稿）→ 抖音发布。
 
-由 9 个影视专业 agent 分工协作，通过分阶段 slash 命令推进，内置三道人工确认门禁防止积分误消耗。
+由 11 个影视专业 agent 分工协作，通过分阶段 slash 命令推进，内置四道人工确认门禁（防止积分误消耗和误发布）。
 
 ## 环境要求
 
@@ -11,6 +11,9 @@
 | `dreamina` CLI | 即梦官方 AIGC CLI，负责视频生成（Seedance 2.0） | `dreamina user_credit` 能返回余额即已登录；未登录先 `dreamina login` |
 | Google 账号（Chrome 已登录） | 美术指导通过浏览器自动化操作 Gemini 网页端画设定图（不耗即梦积分） | 浏览器能正常打开 gemini.google.com 并对话 |
 | Suno 账号（浏览器已登录） | 配乐师通过浏览器自动化操作 Suno 网页端生成背景音乐 | 浏览器能正常打开 suno.com/create 并生成 |
+| 剪映（JianyingPro） | 精剪师自动生成剪映草稿；5.9 草稿兼容最完整，≤6.8 支持自动导出，新版草稿加密支持有限 | 本机已安装剪映，能打开草稿 |
+| `pyJianYingDraft` | 剪映草稿生成 Python 库 | `python -c "import pyJianYingDraft"` 不报错（`python -m pip install pyJianYingDraft`） |
+| 抖音创作者中心（浏览器已登录） | 运营 agent 半自动发布（发布前必经用户确认） | 浏览器能打开 creator.douyin.com 且已登录 |
 | `ffmpeg` / `ffprobe` | 本地转码与拼接 | `ffmpeg -version` |
 | `agent-browser` | 浏览器自动化 CLI（Gemini 网页端自动化用） | `agent-browser --help` |
 
@@ -27,7 +30,9 @@
 6. /shoot            # 报积分预估 →【门禁③ 确认】→ 批量生成视频镜头（即梦视频自带声音）
 7. /music            # Suno 生成背景音乐（剧本定稿后即可做，可与生成/审片并行）
 8. /review           # 抽帧质检，不合格镜头回炉（回 /shoot 重拍）
-9. /edit             # ffmpeg 粗剪（保留原声）+ 精剪交付包，输出到 05-final/
+9. /edit             # ffmpeg 粗剪（保留原声），快速预览节奏
+10. /finalcut        # 自动生成剪映草稿：转场+BGM对位+台词字幕+滤镜 → 剪映中微调导出
+11. /publish         # 发布文案+封面 → 半自动上传抖音 →【门禁④ 确认】→ 发布
 ```
 
 随时可用 `/studio-status` 查看所有项目进度、积分余额，并收割挂起的生成任务。
@@ -46,6 +51,8 @@
 | `/music` | Suno 网页端生成 BGM + 对位说明 | - |
 | `/review` | 抽帧质检、一致性检查、回炉清单 | 回炉需再过门禁③ |
 | `/edit` | 统一转码、粗剪拼接（保留原声）、精剪交付包 | - |
+| `/finalcut` | pyJianYingDraft 自动生成剪映草稿（转场/BGM/字幕/滤镜） | - |
+| `/publish` | 发布文案、封面图、半自动发布抖音等平台 | ④ 发布前确认 |
 | `/studio-status` | 全项目进度 + 积分余额总览 | - |
 
 ## Agent 团队
@@ -60,7 +67,9 @@
 | video-generator | 视频生成师 | 调 dreamina 提交/轮询/下载/重试，实时记账 |
 | composer | 配乐师 | Suno 网页端生成 BGM、对位说明 |
 | editor | 剪辑师 | ffmpeg 统一编码、粗剪拼接（保留原声）、精剪交付包 |
+| finalcut | 精剪师 | pyJianYingDraft 生成剪映草稿：转场、BGM 对位、字幕轨、滤镜 |
 | reviewer | 审片人 | 抽帧质检：畸变、角色一致性、连贯性 |
+| operator | 运营 | 发布文案、封面图、半自动发布（抖音/快手/视频号） |
 
 每个 agent 可单独调用，不必走完整流水线，例如：
 
@@ -77,7 +86,9 @@
   - 精确首尾画面 → `frames2video`
   - 默认 `seedance2.0fast`（性价比），重点镜头 `seedance2.0`（质量）
 - **背景音乐** → Suno 网页端（浏览器自动化）；BGM 作为独立素材交付，不混入粗剪
-- **文生文**（剧本/分镜/提示词）→ Claude 本体
+- **精剪** → `pyJianYingDraft` 生成剪映草稿工程（转场/BGM 对位/字幕轨/滤镜），剪映中微调导出
+- **平台发布** → 抖音创作者中心等网页端（浏览器自动化，发布前门禁④确认）
+- **文生文**（剧本/分镜/提示词/发布文案）→ Claude 本体
 
 ## 项目目录结构
 
@@ -87,8 +98,9 @@ projects/<剧名>/
 ├── 01-script/             # outline.md、characters.md、ep01.md ...
 ├── 02-storyboard/         # ep01-storyboard.md ...
 ├── 03-design/             # style-bible.md、characters/、scenes/
-├── 04-footage/ep01/       # shotlist.json（任务清单兼生成日志）+ sh01.mp4 ... + bgm/（BGM + 对位说明）
-└── 05-final/              # <剧名>-ep01-粗剪.mp4 + delivery-ep01.md（精剪交付包清单）
+├── 04-footage/ep01/       # shotlist.json（任务清单兼生成日志）+ sh01.mp4 ... + ep01.srt + bgm/
+├── 05-final/              # <剧名>-ep01-粗剪.mp4 + delivery-ep01.md + finalcut-ep01.md（精剪说明）
+└── 06-publish/ep01/       # copy.md（发布文案）+ cover.png（封面）+ publish-log.md（发布记录）
 ```
 
 ## 防烧钱机制
@@ -100,13 +112,20 @@ projects/<剧名>/
 
 ## 范围说明（交付边界）
 
-工作台交付**精剪素材包**，最终成片在剪映 / Premiere 中精剪完成：
+- ✅ 粗剪预览（`/edit`）：顺序硬切拼接，**保留即梦原声（台词/音效）**，快速看节奏
+- ✅ 剪映精剪草稿（`/finalcut`）：自动组装转场、BGM 对位、台词字幕轨、全局滤镜——
+  打开剪映即可微调（常见微调点：转场、字幕断句、BGM 音量），**导出由用户在剪映中完成**
+- ✅ 发布物料与半自动发布（`/publish`）：候选标题、话题标签、封面图、上传填单，**点击发布前必经确认**
+- ❌ 剪映账号 VIP 素材、平台登录操作 → 永远由用户本人完成
 
-- ✅ 粗剪预览：顺序硬切拼接，**保留即梦原声（台词/音效）**，无字幕、无配乐混音
-- ✅ 原始镜头片段（未二压，精剪用）
-- ✅ 背景音乐：Suno 生成的 BGM + 对位说明（入点镜头、情绪、循环建议）
-- ✅ 台词本（配字幕用）
-- ❌ 字幕、配乐混音、转场、调色 → 剪映/PR 精剪阶段完成
+### 四道门禁
+
+| 门禁 | 位置 | 保护什么 |
+|---|---|---|
+| ① 剧本定稿 | /script 末尾 | 后续所有阶段的返工成本 |
+| ② 设定图定稿 | /design 末尾 | 成片角色一致性 |
+| ③ 积分报价确认 | /shoot 生成前 | 即梦积分（唯一大额消耗点） |
+| ④ 发布确认 | /publish 点击发布前 | 对外发布不可撤回 |
 
 ## 仓库结构
 
