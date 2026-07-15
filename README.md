@@ -97,7 +97,7 @@ claude plugin install film-studio@film-studio
 | `/shoot` | 提示词 → 积分报价 → 批量生成 → 下载 | ③ 报价确认（唯一大额耗积分环节） |
 | `/music` | Suno 网页端生成 BGM + 对位说明 | - |
 | `/review` | 抽帧质检、一致性检查、回炉清单 | 回炉需再过门禁③ |
-| `/finalcut` | **成片主推**：非破坏性精剪，Resolve Studio（推荐，可自动渲染）或剪映草稿（默认） | - |
+| `/finalcut` | **成片主推**：非破坏性精剪，Resolve Studio（推荐，可自动渲染）或剪映草稿（默认，含专业转场/动画/滤镜素材库） | - |
 | `/edit` | 可选：无损粗剪预览（看节奏）+ 人工精剪交付包 | - |
 | `/publish` | 发布文案、封面图、半自动发布抖音等平台 | ④ 发布前确认 |
 | `/studio-status` | 全项目进度 + 积分余额总览 | - |

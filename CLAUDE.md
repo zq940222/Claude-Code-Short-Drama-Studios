@@ -11,7 +11,7 @@
 .claude-plugin/marketplace.json # 自托管 marketplace（版本号与 plugin.json 保持一致；renames 保留旧名映射）
 agents/                         # 11 个专业 agent（插件标准路径）
 skills/                         # 11 个阶段命令（插件标准路径）
-tools/                          # concat.py + clean_refimg.py 跨平台脚本（/new-drama 建项时复制进工作区）
+tools/                          # concat.py + clean_refimg.py + jianying_assets.py 跨平台脚本（/new-drama 建项时复制进工作区）
 templates/workspace-CLAUDE.md   # 工作区规范模板（/new-drama 建项时复制为工作区 CLAUDE.md）
 requirements.txt                # Python 依赖（pyJianYingDraft）
 docs/superpowers/specs/         # 设计文档（含修订记录）

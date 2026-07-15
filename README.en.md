@@ -99,7 +99,7 @@ Run `/studio-status` anytime to see project progress, credit balance, and to col
 | `/shoot` | Prompts → credit quote → batch generation → download | ③ Quote confirmation (the only large credit spend) |
 | `/music` | Suno BGM + placement notes | - |
 | `/review` | Frame extraction QC, consistency checks, redo list | Redo passes Gate ③ again |
-| `/finalcut` | **Primary path**: non-destructive fine cut — DaVinci Resolve Studio (recommended, auto-render) or JianYing draft (default) | - |
+| `/finalcut` | **Primary path**: non-destructive fine cut — DaVinci Resolve Studio (recommended, auto-render) or JianYing draft (default, with pro transition/animation/filter asset library) | - |
 | `/edit` | Optional: lossless rough-cut preview (pacing) + hand-off package for manual fine-cutting | - |
 | `/publish` | Copy, cover image, semi-automatic publishing to Douyin etc. | ④ Pre-publish confirmation |
 | `/studio-status` | All-project progress + credit overview | - |

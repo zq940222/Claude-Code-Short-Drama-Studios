@@ -20,6 +20,7 @@ description: 精剪阶段。调度精剪师 agent 自动组装精剪工程——
 
 ## 流程
 
+0. 走剪映路径时，工作区缺 `tools/jianying_assets.py` 先从插件根（本技能目录上两级）的 `tools/` 复制过来（精剪师查真实可用的转场/滤镜素材名要用）
 1. 调度 **finalcut** agent，它会自动选择工具：
    - **检测到 DaVinci Resolve Studio 可连接** → 告知用户"推荐用 Resolve（可自动渲染导出成片）"，
      确认后用官方 Python API 建工程：时间线（镜头序列）、BGM 音轨对位、字幕（SRT）、调色建议；
