@@ -79,9 +79,9 @@ External dependencies (dreamina CLI, ffmpeg, agent-browser, pyJianYingDraft) are
 6. /shoot            # Credit estimate → [Gate ③ confirmation] → batch-generate video shots (Dreamina videos include sound)
 7. /music            # Generate BGM with Suno (available once the script is approved; runs in parallel with 6/8)
 8. /review           # Frame-by-frame QC; failed shots go back to /shoot for re-generation
-9. /edit             # ffmpeg rough cut (original audio preserved) for a quick pacing preview
-10. /finalcut        # Auto-generate a JianYing draft: transitions + BGM placement + dialogue subtitles + filters → fine-tune and export in JianYing
-11. /publish         # Copywriting + cover → semi-automatic Douyin upload → [Gate ④ confirmation] → publish
+9. /finalcut         # [Recommended] Non-destructive fine cut: assemble a JianYing/DaVinci timeline directly from original clips (transitions+BGM+subtitles+filters), render the final film
+   /edit             # (Optional) lossless rough-cut preview for pacing + a hand-off package for manual fine-cutting; not the final film
+10. /publish         # Copywriting + cover → semi-automatic Douyin upload → [Gate ④ confirmation] → publish
 ```
 
 Run `/studio-status` anytime to see project progress, credit balance, and to collect pending generation tasks.
@@ -99,8 +99,8 @@ Run `/studio-status` anytime to see project progress, credit balance, and to col
 | `/shoot` | Prompts → credit quote → batch generation → download | ③ Quote confirmation (the only large credit spend) |
 | `/music` | Suno BGM + placement notes | - |
 | `/review` | Frame extraction QC, consistency checks, redo list | Redo passes Gate ③ again |
-| `/edit` | Normalize, rough-cut concat (audio preserved), delivery package | - |
-| `/finalcut` | Auto-assemble the fine-cut project: DaVinci Resolve Studio (recommended, auto-render) or JianYing draft (default) | - |
+| `/finalcut` | **Primary path**: non-destructive fine cut — DaVinci Resolve Studio (recommended, auto-render) or JianYing draft (default) | - |
+| `/edit` | Optional: lossless rough-cut preview (pacing) + hand-off package for manual fine-cutting | - |
 | `/publish` | Copy, cover image, semi-automatic publishing to Douyin etc. | ④ Pre-publish confirmation |
 | `/studio-status` | All-project progress + credit overview | - |
 
@@ -164,9 +164,12 @@ projects/<title>/
 
 ## Scope (Delivery Boundary)
 
-- ✅ Rough-cut preview (`/edit`): hard-cut concatenation with **original Dreamina audio (dialogue/SFX) preserved**, for quick pacing checks
-- ✅ Fine-cut project (`/finalcut`): auto-assembled transitions, BGM placement, dialogue subtitle track, filter/grading notes —
-  the Resolve path can **auto-render the final film after you approve the timeline**; the JianYing path opens as a draft for touch-ups (transitions, subtitle line breaks, BGM volume) and **you export it in JianYing**
+- ✅ **Fine cut (`/finalcut`, recommended path, non-destructive)**: references the original clips directly to assemble an NLE
+  timeline — transitions, BGM placement, subtitle track, filter/grading — all transforms live on the timeline and it renders
+  once at export, so **originals lose nothing**. The Resolve path can **auto-render the final film after you approve the timeline**;
+  the JianYing path opens as a draft for touch-ups and **you export it in JianYing**
+- ✅ Rough-cut preview (`/edit`, optional): lossless concatenation (zero re-encode when clips share a spec), **for quick pacing checks only** —
+  not the final film; also produces a full hand-off package for a human editor (original materials + EDL cut list + manual fine-cut steps)
 - ✅ Publishing materials and semi-automatic publishing (`/publish`): candidate titles, hashtags, cover image, upload and form filling — **publishing requires your confirmation**
 - ✅ Optional editing enhancements (**both off by default**; pick at project creation or ask the producer anytime): episode-to-episode overlap (each episode reopens with the last few seconds of the previous one) and intro/outro cards (series-reusable title/CTA cards)
 - ❌ JianYing VIP assets and platform logins → always done by you personally
