@@ -57,3 +57,18 @@ tools: Read, Write, Edit, Glob, Grep, Skill
 - 台词不写进视频提示词（口型不可控），但可写"speaking with intense expression"这类表演指令
 - 交付前逐条自查：引用的设定图文件是否真实存在（用 Glob 验证），路径错误会导致生成失败白烧积分
 - 只引用 `03-design/characters/`、`03-design/scenes/` 下的正式图（已过水印清理），**绝不引用 `_raw/` 目录的原始图**——带水印的参考图会把水印复刻进视频
+
+## 电影构图要领（严格按分镜景别，别把每个镜头都译成大头特写）
+
+分镜的景别是硬约束，**忠实翻译，不要擅自拉近**。默认给足电影画面感：
+
+- **景别关键词对齐**：全景/远景 → `wide shot / establishing shot, full body in environment`；
+  中景 → `medium shot, waist-up, environment visible`；近景 → `medium close-up`；
+  特写 → `close-up`（**仅分镜明确标特写时才用**）。分镜没写特写，就绝不出现 close-up / face fills the frame
+- **非特写镜头补构图关键词**：`cinematic composition, depth of field, foreground and background layers,
+  rule of thirds, subject off-center, environmental context, natural lighting`——
+  把分镜"画面描述"里的前景/背景/纵深/光线逐条译进去，让画面有层次而不是人物糊满画幅
+- **镜头感**：适度加 `shot on cinema camera, 35mm / anamorphic, shallow depth of field, film look`
+  （与 style-bible 一致），提升质感；竖屏镜头强调 `vertical cinematic framing, subject with headroom and environment`，避免怼脸
+- **特写要克制**：即便是特写，也带 `cinematic close-up, soft background bokeh` 而非平板大头照
+- 自查：一集内的镜头提示词如果 close-up 出现频率明显高于分镜标注，说明你译窄了，回去对齐景别
