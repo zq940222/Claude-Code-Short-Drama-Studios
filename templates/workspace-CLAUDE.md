@@ -60,12 +60,17 @@
 
 - **设定图**（角色三视图、场景概念图）→ Gemini 网页端 Nano Banana（`agent-browser` 浏览器自动化，省即梦积分）；不可用时降级 `dreamina text2image` 并告知用户。
   **Gemini 出图右下角有水印，入库前必须用 `tools/clean_refimg.py` 清理并肉眼复查**——带水印的参考图会被 Seedance 复刻进视频且无法补救；原始图放 `03-design/_raw/`，只有清理过的图才能进 `characters/`、`scenes/`
-- **视频片段** → 即梦 `dreamina` CLI（Seedance 2.0 家族），**生成的视频自带声音（台词/音效），全流程必须保留音轨**：
+- **视频片段** → 即梦 `dreamina` CLI（Seedance 2.0 家族）。**用满即梦能力：单次可 4-15 秒、可在一条提示词里用时间码切多节拍（导演切镜）、可多帧串连贯段落、可调分辨率——别把每个镜头都做成 4s 单动作短片**：
+  - 即梦网页端功能名 ↔ CLI 模式：**全能参考=`multimodal2video`、智能多帧=`multiframe2video`、首尾帧=`frames2video`**
   - 纯场景空镜 → `text2video`
-  - 含角色镜头 → `multimodal2video`（引用角色设定图保证一致性，image≤9）
-  - 精确控制首尾画面 → `frames2video`
+  - 含角色镜头（全能参考）→ `multimodal2video`（引用角色设定图保证一致性，image≤9；连续戏用 8-15s 长镜+时间码多节拍讲，一致性与原声都保住）
+  - 精确控制首尾画面（首尾帧）→ `frames2video`；单图动起来/尾帧衔接 → `image2video`
+  - 一段连续动作有 2-20 张关键帧图（智能多帧）→ `multiframe2video`（切镜插值成连贯段落，**静音、无模型/分辨率参数**，音轨由精剪补）
+  - **关键帧来源**：首尾帧/智能多帧需要镜头专属关键帧（非角色/场景设定图）——由美术指导按 shotlist 的 `keyframes_needed` 用 Gemini 出图（省积分、走水印清理）落 `03-design/keyframes/`；衔接首帧由视频生成师用 ffmpeg 从上一镜抽尾帧
+  - **分辨率**：`multimodal2video` 与整个 seedance2.0 家族封顶 **720p**；**1080p 只在 `image2video`/`frames2video` 的 3.5pro/3.0pro 上有，且放弃全能 @引用**——故 1080p 只给空镜/静物，反复出场角色一律留在 720p 的 multimodal 路线保一致性
   - **模型默认走 VIP 通道防排队**：常规镜头 `seedance2.0fast_vip`，重点镜头 `seedance2.0_vip`；
     非 VIP 通道（`seedance2.0fast`/`seedance2.0`）仅在用户明确要求省积分且不赶时间时用
+  - **音轨**：multimodal/text/image/frames 系自带声音（台词/音效），全流程保留；`multiframe2video` 静音属正常，音轨在精剪阶段补齐——**全流程必须保留音轨，但静音由精剪补齐，不因缺音轨重生成烧积分**
 - **背景音乐** → Suno 网页端（`agent-browser` 浏览器自动化）；BGM 是精剪素材，不混入粗剪
 - **精剪** → 检测到 DaVinci Resolve Studio（**推荐**，官方 Python API，可自动渲染导出）则优先征询使用；
   否则默认 `pyJianYingDraft` 生成剪映草稿（不推销 Resolve），用户在剪映中微调导出
@@ -80,7 +85,7 @@ projects/<片名>/
 ├── project.json           # 项目档案：创作形态(medium)、画幅、时长、集数、剪辑增强(editing)、各阶段状态
 ├── 01-script/             # outline.md, characters.md, ep01.md ...
 ├── 02-storyboard/         # ep01-storyboard.md ...
-├── 03-design/             # characters/<角色>-*.png, scenes/<场景>-*.png, style-bible.md
+├── 03-design/             # characters/<角色>-*.png, scenes/<场景>-*.png, keyframes/ep{NN}-sh{NN}-*.png（首尾帧/多帧关键帧）, style-bible.md
 ├── 04-footage/ep01/       # shotlist.json + sh01.mp4 ... + ep01.srt + bgm/（Suno BGM + 对位说明）
 ├── 05-final/              # <剧名>-ep01-粗剪.mp4 + delivery-ep01.md + finalcut-ep01.md（精剪说明）
 └── 06-publish/ep01/       # copy.md（发布文案）+ cover.png（封面）+ publish-log.md（发布记录）
@@ -94,7 +99,7 @@ projects/<片名>/
 
 1. **未经门禁③确认，绝不提交任何消耗积分的视频生成任务。**
 2. 每次提交生成任务后立即把 submit_id 写入 shotlist.json，防止任务丢失。
-3. 每个下载文件必须过可用性质检（ffprobe：完整性/时长/画幅/**音轨**），通过才置 `status=success`、才重命名为 `sh{NN}.mp4`——不轻信 CLI 的 success 状态。
+3. 每个下载文件必须过可用性质检（ffprobe：完整性/时长/画幅/**音轨**），通过才置 `status=success`、才重命名为 `sh{NN}.mp4`——不轻信 CLI 的 success 状态。**音轨检查按 mode 判定**：静音模式（`multiframe2video`/标了 `silent` 的镜头）不要求音轨、缺音轨正常；自带音轨模式若缺音轨只记 warning 交精剪补音，**缺音轨绝不触发重生成烧积分**。
 4. **重生成（烧积分）每镜最多 1 次**，再失败停下报告，不得无限重试烧积分；重下载（免费，修传输问题）不受此限。
 5. `/shoot` 前必须 `dreamina user_credit` 检查余额；首次生成后记录实际消耗，校准后续报价（积分单价不得凭空假设）。
 6. 遇到 `AigcComplianceConfirmationRequired` 错误：停下，提示用户去即梦 Web 端完成内容安全授权后重试。
